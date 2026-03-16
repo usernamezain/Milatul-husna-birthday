@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Milatul Husna</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            overflow-x: hidden;
+            color: #fff;
+        }
+        
+        .arabic-font {
+            font-family: 'Amiri', serif;
+        }
+        
+        .script-font {
+            font-family: 'Great Vibes', cursive;
+        }
+        
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        .content-layer > * {
+            pointer-events: auto;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+        }
+        
+        .gold-text {
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .prayer-card {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-left: 4px solid #FFD700;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .prayer-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
+        }
+        
+        .candle-flame {
+            filter: drop-shadow(0 0 20px #ff6b35) drop-shadow(0 0 40px #f7c600);
+        }
+        
+        .batik-pattern {
+            background-image: url('https://kimi-web-img.moonshot.cn/img/img.freepik.com/0de0d4bd49e3327d1eb0437e493a899c04b6e627.jpg');
+            opacity: 0.1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .geometric-pattern {
+            background-image: url('https://kimi-web-img.moonshot.cn/img/img.freepik.com/da8ddcade853e06b0c6396c0909b15d25e7dfe52.jpg');
+            opacity: 0.15;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .name-3d {
+            font-size: 5rem;
+            font-weight: bold;
+            text-align: center;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FF6B6B, #FFD700);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 5s ease infinite;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.5));
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .moon-icon {
+            color: #FFD700;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+        }
+        
+        .indonesia-flag {
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(to bottom, #ff0000 50%, #ffffff 50%);
+            border-radius: 4px;
+            display: inline-block;
+            margin: 0 10px;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        
+        .pakistan-flag {
+            width: 40px;
+            height: 30px;
+            background: #01411C;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 0 10px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(1, 65, 28, 0.5);
+        }
+        
+        .pakistan-flag::before {
+            content: '☪';
+            position: absolute;
+            color: white;
+            font-size: 20px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-20px); }
+            60% { transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Canvas for Stars -->
+    <canvas id="stars-canvas" class="stars-bg"></canvas>
+    
+    <!-- Three.js Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Content Layer -->
+    <div class="content-layer">
+        
+        <!-- Hero Section -->
+        <section class="section relative overflow-hidden">
+            <div class="geometric-pattern"></div>
+            <div class="container mx-auto text-center relative z-10">
+                <div class="floating mb-8">
+                    <i class="fas fa-moon moon-icon text-6xl mb-4"></i>
+                </div>
+                <h1 class="script-font text-7xl md:text-9xl mb-4 gold-text">Happy Birthday</h1>
+                <div class="name-3d script-font mb-8" id="name-display">Milatul Husna</div>
+                <p class="text-xl md:text-2xl text-gray-300 mb-4 max-w-2xl mx-auto">
+                    May Allah bless you with happiness, health, and prosperity
+                </p>
+                <div class="flex items-center justify-center gap-4 mt-8">
+                    <div class="indonesia-flag" title="Indonesia"></div>
+                    <span class="text-lg text-gray-400">From Indonesia with Love</span>
+                </div>
+                <div class="scroll-indicator text-gold-500">
+                    <i class="fas fa-chevron-down text-3xl text-yellow-500"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Islamic Prayers Section -->
+        <section class="section relative">
+            <div class="batik-pattern"></div>
+            <div class="container mx-auto max-w-6xl">
+                <h2 class="script-font text-5xl md:text-6xl text-center mb-16 gold-text">Blessings & Prayers</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                    <!-- Prayer 1 -->
+                    <div class="prayer-card glass-card p-8 rounded-2xl">
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-pray text-3xl text-yellow-500 mt-2"></i>
+                            <div>
+                                <h3 class="arabic-font text-2xl mb-2 text-yellow-400">Barakallahu Fii Umrik</h3>
+                                <p class="text-gray-300 mb-2">May Allah bless you on your birthday</p>
+                                <p class="arabic-font text-lg text-gray-400" dir="rtl">بارك الله في عمرك</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prayer 2 -->
+                    <div class="prayer-card glass-card p-8 rounded-2xl">
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-heart text-3xl text-yellow-500 mt-2"></i>
+                            <div>
+                                <h3 class="arabic-font text-2xl mb-2 text-yellow-400">Dua for Long Life</h3>
+                                <p class="text-gray-300 mb-2">May Allah grant you a long life full of Iman and Taqwa</p>
+                                <p class="arabic-font text-lg text-gray-400" dir="rtl">اللهم أعطها حياة طويلة في طاعتك</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prayer 3 -->
+                    <div class="prayer-card glass-card p-8 rounded-2xl">
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-star text-3xl text-yellow-500 mt-2"></i>
+                            <div>
+                                <h3 class="arabic-font text-2xl mb-2 text-yellow-400">Dua for Success</h3>
+                                <p class="text-gray-300 mb-2">May Allah make you successful in this life and the Hereafter</p>
+                                <p class="arabic-font text-lg text-gray-400" dir="rtl">اللهم وفقها في الدنيا والآخرة</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prayer 4 -->
+                    <div class="prayer-card glass-card p-8 rounded-2xl">
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-gift text-3xl text-yellow-500 mt-2"></i>
+                            <div>
+                                <h3 class="arabic-font text-2xl mb-2 text-yellow-400">Birthday Prayer</h3>
+                                <p class="text-gray-300 mb-2">May this new year of your life bring you closer to Allah</p>
+                                <p class="arabic-font text-lg text-gray-400" dir="rtl">جعله الله عام خير وبركة عليك</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Cake Showcase Section -->
+        <section class="section relative">
+            <div class="container mx-auto text-center">
+                <h2 class="script-font text-5xl md:text-6xl mb-8 gold-text">Special Cake</h2>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    A virtual cake baked with love and decorated with Islamic geometric patterns
+                </p>
+                <div class="glass-card inline-block p-8 rounded-2xl max-w-2xl">
+                    <p class="text-lg text-gray-300 italic">
+                        "Drag to rotate the cake • Scroll to zoom"
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Message Section -->
+        <section class="section relative">
+            <div class="geometric-pattern"></div>
+            <div class="container mx-auto max-w-4xl text-center">
+                <div class="glass-card p-12 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400"></div>
+                    <i class="fas fa-envelope-open-text text-5xl text-yellow-500 mb-6"></i>
+                    <h2 class="script-font text-4xl md:text-5xl mb-6 gold-text">A Special Message</h2>
+                    <p class="text-xl text-gray-300 leading-relaxed mb-8">
+                        Dear Milatul Husna,<br><br>
+                        On this blessed day, I pray that Allah showers His countless blessings upon you. 
+                        May your life be filled with joy, your heart with peace, and your path with guidance. 
+                        Distance may separate us, but prayers transcend all boundaries. 
+                        From Pakistan to Indonesia, sending you warm wishes on your special day!
+                    </p>
+                    <div class="flex justify-center gap-4 text-4xl">
+                        <span>🎂</span>
+                        <span>🌙</span>
+                        <span>✨</span>
+                        <span>🎈</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Credits Footer -->
+        <footer class="py-12 relative bg-black bg-opacity-50">
+            <div class="container mx-auto text-center">
+                <div class="flex items-center justify-center gap-4 mb-6">
+                    <div class="pakistan-flag" title="Pakistan"></div>
+                    <span class="text-2xl">❤️</span>
+                    <div class="indonesia-flag" title="Indonesia"></div>
+                </div>
+                <p class="text-gray-400 text-lg mb-2">Created with love and prayers</p>
+                <p class="script-font text-3xl gold-text mb-4">Zain Ali Mughal</p>
+                <p class="text-sm text-gray-500">From Pakistan • 2026</p>
+                <div class="mt-8 flex justify-center gap-6">
+                    <i class="fas fa-moon text-yellow-500 text-2xl animate-pulse"></i>
+                    <i class="fas fa-star text-yellow-500 text-2xl animate-pulse" style="animation-delay: 0.5s"></i>
+                    <i class="fas fa-moon text-yellow-500 text-2xl animate-pulse" style="animation-delay: 1s"></i>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // STAR BACKGROUND ANIMATION
+        // ==========================================
+        const starsCanvas = document.getElementById('stars-canvas');
+        const starsCtx = starsCanvas.getContext('2d');
+        let stars = [];
+        
+        function resizeStarsCanvas() {
+            starsCanvas.width = window.innerWidth;
+            starsCanvas.height = window.innerHeight;
+        }
+        
+        class Star {
+            constructor() {
+                this.reset();
+            }
+            
+            reset() {
+                this.x = Math.random() * starsCanvas.width;
+                this.y = Math.random() * starsCanvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random();
+                this.fadeSpeed = 0.01 + Math.random() * 0.02;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity += this.fadeSpeed;
+                
+                if (this.opacity > 1 || this.opacity < 0) {
+                    this.fadeSpeed = -this.fadeSpeed;
+                }
+                
+                if (this.x < 0 || this.x > starsCanvas.width || 
+                    this.y < 0 || this.y > starsCanvas.height) {
+                    this.reset();
+                }
+            }
+            
+            draw() {
+                starsCtx.fillStyle = `rgba(255, 215, 0, ${Math.abs(this.opacity)})`;
+                starsCtx.beginPath();
+                starsCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                starsCtx.fill();
+            }
+        }
+        
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < 150; i++) {
+                stars.push(new Star());
+            }
+        }
+        
+        function animateStars() {
+            starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+            requestAnimationFrame(animateStars);
+        }
+        
+        resizeStarsCanvas();
+        initStars();
+        animateStars();
+        window.addEventListener('resize', () => {
+            resizeStarsCanvas();
+            initStars();
+        });
+
+        // ==========================================
+        // THREE.JS 3D CAKE
+        // ==========================================
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const spotLight = new THREE.SpotLight(0xffd700, 1);
+        spotLight.position.set(10, 20, 10);
+        spotLight.castShadow = true;
+        spotLight.shadow.mapSize.width = 2048;
+        spotLight.shadow.mapSize.height = 2048;
+        scene.add(spotLight);
+
+        const pointLight1 = new THREE.PointLight(0xff6b35, 0.8);
+        pointLight1.position.set(-10, 10, -10);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0x00d4ff, 0.5);
+        pointLight2.position.set(10, 5, 10);
+        scene.add(pointLight2);
+
+        // Cake Group
+        const cakeGroup = new THREE.Group();
+        scene.add(cakeGroup);
+
+        // Texture Loader
+        const textureLoader = new THREE.TextureLoader();
+        
+        // Create Canvas Texture for Name
+        function createNameTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            
+            // Background
+            ctx.fillStyle = '#FFF8DC';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Border
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 5;
+            ctx.strokeRect(5, 5, canvas.width-10, canvas.height-10);
+            
+            // Text
+            ctx.font = 'bold 60px "Great Vibes", cursive';
+            ctx.fillStyle = '#8B4513';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Milatul Husna', canvas.width/2, canvas.height/2);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            return texture;
+        }
+
+        // Cake Materials
+        const cakeMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xFFF8DC,
+            roughness: 0.4,
+            metalness: 0.1
+        });
+
+        const icingMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xFFD700,
+            roughness: 0.2,
+            metalness: 0.3,
+            emissive: 0xFFD700,
+            emissiveIntensity: 0.1
+        });
+
+        const chocolateMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x8B4513,
+            roughness: 0.6
+        });
+
+        // Cake Base (Bottom Tier)
+        const baseGeometry = new THREE.CylinderGeometry(4, 4, 3, 32);
+        const baseCake = new THREE.Mesh(baseGeometry, cakeMaterial);
+        baseCake.position.y = 1.5;
+        baseCake.castShadow = true;
+        baseCake.receiveShadow = true;
+        cakeGroup.add(baseCake);
+
+        // Base Icing
+        const baseIcingGeometry = new THREE.CylinderGeometry(4.2, 4.2, 0.3, 32);
+        const baseIcing = new THREE.Mesh(baseIcingGeometry, icingMaterial);
+        baseIcing.position.y = 3;
+        cakeGroup.add(baseIcing);
+
+        // Cake Middle Tier
+        const middleGeometry = new THREE.CylinderGeometry(3, 3, 2.5, 32);
+        const middleCake = new THREE.Mesh(middleGeometry, cakeMaterial);
+        middleCake.position.y = 4.25;
+        middleCake.castShadow = true;
+        cakeGroup.add(middleCake);
+
+        // Middle Icing
+        const middleIcingGeometry = new THREE.CylinderGeometry(3.2, 3.2, 0.3, 32);
+        const middleIcing = new THREE.Mesh(middleIcingGeometry, icingMaterial);
+        middleIcing.position.y = 5.5;
+        cakeGroup.add(middleIcing);
+
+        // Cake Top Tier
+        const topGeometry = new THREE.CylinderGeometry(2, 2, 2, 32);
+        const topCake = new THREE.Mesh(topGeometry, cakeMaterial);
+        topCake.position.y = 6.5;
+        topCake.castShadow = true;
+        cakeGroup.add(topCake);
+
+        // Name Plate on Top
+        const nameGeometry = new THREE.CylinderGeometry(1.8, 1.8, 0.1, 32);
+        const nameTexture = createNameTexture();
+        const nameMaterial = new THREE.MeshStandardMaterial({ 
+            map: nameTexture,
+            roughness: 0.3
+        });
+        const namePlate = new THREE.Mesh(nameGeometry, nameMaterial);
+        namePlate.position.y = 7.55;
+        cakeGroup.add(namePlate);
+
+        // Decorative Pearls around tiers
+        function addPearls(radius, y, count) {
+            for (let i = 0; i < count; i++) {
+                const angle = (i / count) * Math.PI * 2;
+                const pearlGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+                const pearl = new THREE.Mesh(pearlGeometry, icingMaterial);
+                pearl.position.x = Math.cos(angle) * radius;
+                pearl.position.z = Math.sin(angle) * radius;
+                pearl.position.y = y;
+                cakeGroup.add(pearl);
+            }
+        }
+
+        addPearls(4.1, 1.5, 20);
+        addPearls(3.1, 4.25, 16);
+        addPearls(2.1, 6.5, 12);
+
+        // Candles
+        const candleGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1.5, 16);
+        const candleMaterial = new THREE.MeshStandardMaterial({ color: 0xFF6B6B });
+        
+        const candlePositions = [
+            { x: 0, z: 0 },
+            { x: 1, z: 0.5 },
+            { x: -0.8, z: -0.6 },
+            { x: 0.5, z: -0.8 }
+        ];
+
+        candlePositions.forEach((pos, index) => {
+            const candle = new THREE.Mesh(candleGeometry, candleMaterial);
+            candle.position.set(pos.x, 8.5, pos.z);
+            cakeGroup.add(candle);
+
+            // Flame
+            const flameGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+            const flameMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0xFFAA00,
+                transparent: true,
+                opacity: 0.9
+            });
+            const flame = new THREE.Mesh(flameGeometry, flameMaterial);
+            flame.position.set(pos.x, 9.3, pos.z);
+            
+            // Flame animation
+            gsap.to(flame.scale, {
+                x: 1.3,
+                y: 1.3,
+                z: 1.3,
+                duration: 0.5 + Math.random() * 0.5,
+                repeat: -1,
+                yoyo: true,
+                ease: "power1.inOut"
+            });
+            
+            gsap.to(flame.material, {
+                opacity: 0.6,
+                duration: 0.3,
+                repeat: -1,
+                yoyo: true,
+                ease: "power1.inOut"
+            });
+            
+            cakeGroup.add(flame);
+        });
+
+        // Particles around cake
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 200;
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 20;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0xFFD700,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Camera position
+        camera.position.set(0, 8, 15);
+        camera.lookAt(0, 5, 0);
+
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetRotationX = 0;
+        let targetRotationY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Scroll interaction
+        let scrollY = 0;
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+        });
+
+        // Animation Loop
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const elapsedTime = clock.getElapsedTime();
+            
+            // Rotate cake slowly
+            cakeGroup.rotation.y += 0.005;
+            
+            // Mouse interaction
+            targetRotationX = mouseY * 0.2;
+            targetRotationY = mouseX * 0.2;
+            
+            cakeGroup.rotation.x += (targetRotationX - cakeGroup.rotation.x) * 0.05;
+            cakeGroup.rotation.z += (targetRotationY - cakeGroup.rotation.z) * 0.05;
+            
+            // Floating animation
+            cakeGroup.position.y = Math.sin(elapsedTime) * 0.3;
+            
+            // Particles animation
+            particlesMesh.rotation.y = elapsedTime * 0.1;
+            particlesMesh.position.y = Math.sin(elapsedTime * 0.5) * 0.5;
+            
+            // Camera scroll effect
+            const scrollProgress = scrollY / (document.body.scrollHeight - window.innerHeight);
+            camera.position.y = 8 - scrollProgress * 5;
+            camera.lookAt(0, 5 - scrollProgress * 3, 0);
+            
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // ==========================================
+        // GSAP ANIMATIONS
+        // ==========================================
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animate sections on scroll
+        gsap.utils.toArray('.section').forEach((section, i) => {
+            if (i === 0) return; // Skip hero
+            
+            gsap.from(section.querySelectorAll('.glass-card, h2, p'), {
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'power3.out'
+            });
+        });
+
+        // Animate name display
+        gsap.from('#name-display', {
+            scale: 0,
+            rotation: 720,
+            duration: 2,
+            ease: 'elastic.out(1, 0.5)',
+            delay: 0.5
+        });
+
+        // Prayer cards stagger animation
+        gsap.from('.prayer-card', {
+            scrollTrigger: {
+                trigger: '.prayer-card',
+                start: 'top 85%'
+            },
+            x: -100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: 'power3.out'
+        });
+
+        // Create floating particles on click
+        document.addEventListener('click', (e) => {
+            createParticle(e.clientX, e.clientY);
+        });
+
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.innerHTML = ['✨', '🌟', '💫', '⭐'][Math.floor(Math.random() * 4)];
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.fontSize = '24px';
+            document.body.appendChild(particle);
+            
+            gsap.to(particle, {
+                y: -100,
+                x: (Math.random() - 0.5) * 100,
+                opacity: 1,
+                duration: 0.5,
+                ease: 'power2.out',
+                onComplete: () => {
+                    gsap.to(particle, {
+                        y: -200,
+                        opacity: 0,
+                        duration: 1,
+                        ease: 'power2.in',
+                        onComplete: () => particle.remove()
+                    });
+                }
+            });
+        }
+
+        // Initial entrance animation
+        gsap.from('footer', {
+            scrollTrigger: {
+                trigger: 'footer',
+                start: 'top 90%'
+            },
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+
+    </script>
+</body>
+</html>
